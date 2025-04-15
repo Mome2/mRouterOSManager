@@ -12,7 +12,7 @@ class Role extends Model
      *
      * @var list<string>
      */
-    protected $fillable = ['name', 'display_name', 'description'];
+    protected $fillable = ['name', 'slug', 'description'];
 
     /**
      * The attributes that should be hidden for serialization.
