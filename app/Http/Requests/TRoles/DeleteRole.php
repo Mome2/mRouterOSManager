@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TRoles;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DeleteRole extends FormRequest
 {
@@ -11,7 +12,7 @@ class DeleteRole extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->can('delete_role');
     }
 
     /**
@@ -23,6 +24,7 @@ class DeleteRole extends FormRequest
     {
         return [
             //
+            'id' => 'required|integer|exists:roles,id',
         ];
     }
 }

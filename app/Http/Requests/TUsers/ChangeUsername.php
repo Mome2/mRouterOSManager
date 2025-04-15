@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TUsers;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ChangeUsername extends FormRequest
 {
@@ -11,7 +12,8 @@ class ChangeUsername extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        /** @var \Illuminate\Http\Request $this */
+        return Auth::check() && $this->user()->is(Auth::user());
     }
 
     /**
@@ -21,8 +23,12 @@ class ChangeUsername extends FormRequest
      */
     public function rules(): array
     {
+        /** @var \Illuminate\Http\Request $this */
         return [
             //
+            'id' => 'required|exists:users,id',
+            'password' => 'required|current_password',
+            'username' => 'required|string|max:100|unique:users,username,' . $this->user()->id,
         ];
     }
 }

@@ -24,7 +24,7 @@ class ChangePhone extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string', 'regex:/^\+?[0-9]{1,3}?[0-9]{7,14}$/'],
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9]{1,3}?[0-9]{7,14}$/', 'unique:users,phone'],
         ];
     }
     /**

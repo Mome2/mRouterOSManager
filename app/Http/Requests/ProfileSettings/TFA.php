@@ -3,6 +3,8 @@
 namespace App\Http\Requests\ProfileSettings;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class TFA extends FormRequest
 {
@@ -11,7 +13,8 @@ class TFA extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        /** @var \Illuminate\Http\Request $this */
+        return Auth::check() && $this->user()->is(Auth::user()) && Auth::user()->two_factor_enabled;
     }
 
     /**
@@ -24,5 +27,13 @@ class TFA extends FormRequest
         return [
             'email' => 'required|email|exists:users,email',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        /** @var \Illuminate\Http\Request $this */
+        $this->merge([
+            'email' => $this->user()->email,
+        ]);
     }
 }

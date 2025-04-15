@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TUsers;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ChangeStatus extends FormRequest
 {
@@ -11,7 +12,8 @@ class ChangeStatus extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        /** @var \Illuminate\Http\Request $this */
+        return Auth::check() && ($this->user()->is(Auth::user()) || Auth::user()->can('change_user_status'));
     }
 
     /**
@@ -23,6 +25,8 @@ class ChangeStatus extends FormRequest
     {
         return [
             //
+            'id' => 'required|exists:users,id',
+            'status' => 'required|in:active,inactive',
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TRoles;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AddRole extends FormRequest
 {
@@ -11,7 +12,7 @@ class AddRole extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->can('add_role');
     }
 
     /**
@@ -23,6 +24,9 @@ class AddRole extends FormRequest
     {
         return [
             //
+            'name' => 'required|string|max:100|unique:roles,name',
+            'slug' => 'required|string|max:100|unique:roles,slug',
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

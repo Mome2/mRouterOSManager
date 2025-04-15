@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TPermissions;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class EditPermission extends FormRequest
 {
@@ -11,7 +12,7 @@ class EditPermission extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->can('edit-permission');
     }
 
     /**
@@ -21,8 +22,14 @@ class EditPermission extends FormRequest
      */
     public function rules(): array
     {
+        /** @var \Illuminate\Http\Request $this */
         return [
             //
+            'id' => 'required|integer|exists:permissions,id',
+            'name' => 'required|string|max:100|unique:permissions,name' . $this->input('id'),
+            'slug' => 'required|string|max:100|unique:permissions,slug' . $this->input('id'),
+            'group' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

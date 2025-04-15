@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TUsers;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AddUser extends FormRequest
 {
@@ -11,7 +12,7 @@ class AddUser extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->can('add_user');
     }
 
     /**
@@ -23,6 +24,13 @@ class AddUser extends FormRequest
     {
         return [
             //
+            'name' => 'required|string|max:100',
+            'surname' => 'required|string|max:100',
+            'username' => 'required|string|max:100|unique:users,username',
+            'email' => 'required|string|email|max:100|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'required|string|max:15',
+            'status' => 'required|in:active,inactive',
         ];
     }
 }

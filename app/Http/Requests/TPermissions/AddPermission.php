@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TPermissions;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AddPermission extends FormRequest
 {
@@ -11,7 +12,7 @@ class AddPermission extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->can('add-permission');
     }
 
     /**
@@ -23,6 +24,10 @@ class AddPermission extends FormRequest
     {
         return [
             //
+            'name' => 'required|string|max:100|unique:permissions,name',
+            'slug' => 'required|string|max:100|unique:permissions,slug',
+            'group' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Requests\TPermissions;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class DeletePermission extends FormRequest
+class TFAVerify extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('delete-permission');
+        /** @var \Illuminate\Http\Request $this */
+        return Auth::check() && $this->user()->is(Auth::user()) && Auth::user()->two_factor_enabled && Auth::user()->two_factor_code !== null;
     }
 
     /**
@@ -23,8 +24,7 @@ class DeletePermission extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            'id' => 'required|integer|exists:permissions,id',
+            'code' => 'required|digits:6|integer',
         ];
     }
 }

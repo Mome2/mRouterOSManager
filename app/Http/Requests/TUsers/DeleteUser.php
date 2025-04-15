@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TUsers;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DeleteUser extends FormRequest
 {
@@ -11,7 +12,8 @@ class DeleteUser extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        /** @var \Illuminate\Http\Request $this */
+        return Auth::check() && $this->user()->is(Auth::user());
     }
 
     /**
@@ -23,6 +25,8 @@ class DeleteUser extends FormRequest
     {
         return [
             //
+            'id' => 'required|exists:users,id',
+            'password' => 'required|current_password',
         ];
     }
 }

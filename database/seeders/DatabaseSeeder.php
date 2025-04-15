@@ -25,18 +25,37 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $role = Role::create([
-            'name' => 'Admin',
-            'display_name' => 'Super Admin',
+            'name' => 'Super Admin',
+            'slug' => 'super_admin',
             'description' => 'This is the super admin role',
         ]);
 
-        $permission = Permission::create([
-            'name' => 'Full',
-            'display_name' => 'Full Access',
-            'description' => 'This is the admin permission',
-        ]);
+        $permissions = [
+            [
+                'name' => 'Full Access',
+                'slug' => 'full_access',
+                'group' => 'system',
+                'description' => 'This is the admin permission',
+            ],
+            [
+                'name' => 'Add Role',
+                'slug' => 'add_role',
+                'group' => 'roles',
+                'description' => 'Can add roles',
+            ],
+            [
+                'name' => 'Add Permission',
+                'slug' => 'add_permission',
+                'group' => 'permissions',
+                'description' => 'Can add permissions',
+            ],
+        ];
 
-        $role->permissions()->sync($permission->id);
-        $user->roles()->sync($role->id);
+        foreach ($permissions as $perm) {
+            $permission = Permission::firstOrCreate(['slug' => $perm['slug']], $perm);
+            $role->permissions()->syncWithoutDetaching([$permission->id]);
+        }
+
+        $user->roles()->sync([$role->id]);
     }
 }

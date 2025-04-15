@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TRoles;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class EditRole extends FormRequest
 {
@@ -11,7 +12,7 @@ class EditRole extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->can('edit_role');
     }
 
     /**
@@ -21,8 +22,13 @@ class EditRole extends FormRequest
      */
     public function rules(): array
     {
+        /** @var \Illuminate\Http\Request $this */
         return [
             //
+            'id' => 'required|integer|exists:roles,id',
+            'name' => 'required|string|max:100|unique:roles,name' . $this->input('id'),
+            'slug' => 'required|string|max:100|unique:roles,slug' . $this->input('id'),
+            'description' => 'nullable|string|max:255',
         ];
     }
 }

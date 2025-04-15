@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TUsers;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ChangeEmail extends FormRequest
 {
@@ -11,7 +12,8 @@ class ChangeEmail extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        /** @var \Illuminate\Http\Request $this */
+        return Auth::check() &&  $this->user()->is(Auth::user());
     }
 
     /**
@@ -21,8 +23,11 @@ class ChangeEmail extends FormRequest
      */
     public function rules(): array
     {
+        /** @var \Illuminate\Http\Request $this */
         return [
             //
+            'email' => 'required|string|email|max:100|unique:users,email,' . $this->user()->id,
+            'password' => 'required|current_password',
         ];
     }
 }
