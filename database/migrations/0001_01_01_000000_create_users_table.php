@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('avatar')->default('defaultavatar.png');
-            $table->string('name');
-            $table->string('surname');
+            $table->string('name', 100);
+            $table->string('surname', 100)->nullable();
             $table->string('username')->unique();
             $table->string('password');
             $table->string('email')->unique();
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->enum('locale', ['en', 'ar'])->default('en');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('two_factor_code')->nullable();
-            $table->string('two_factor_code_expiry')->nullable();
-            $table->string('two_factor_enabled')->default('false');
+            $table->timestampTz('two_factor_code_expiry')->nullable();
+            $table->boolean('two_factor_enabled')->default(false);
             $table->timestampsTz();
             $table->softDeletesTz();
         });
