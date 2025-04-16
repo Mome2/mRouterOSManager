@@ -13,7 +13,7 @@ class ResentVerification extends FormRequest
     public function authorize(): bool
     {
         /** @var \Illuminate\Http\Request $this */
-        return Auth::check() && $this->user()->is(Auth::user()) && Auth::user()->email === $this->input('email');;
+        return Auth::user()->email === $this->input('email');;
     }
 
     /**

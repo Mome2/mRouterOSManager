@@ -13,7 +13,7 @@ class ChangeStatus extends FormRequest
     public function authorize(): bool
     {
         /** @var \Illuminate\Http\Request $this */
-        return Auth::check() && ($this->user()->is(Auth::user()) || Auth::user()->can('change_user_status'));
+        return $this->user()->is(Auth::user()) || Auth::user()->can('change_user_status');
     }
 
     /**

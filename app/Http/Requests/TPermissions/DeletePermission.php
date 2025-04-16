@@ -12,7 +12,7 @@ class DeletePermission extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('delete-permission');
+        return Auth::user()->can('delete_permission');
     }
 
     /**

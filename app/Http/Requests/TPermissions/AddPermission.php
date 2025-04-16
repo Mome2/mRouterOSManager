@@ -12,7 +12,7 @@ class AddPermission extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('add-permission');
+        return Auth::user()->can('add_permission');
     }
 
     /**

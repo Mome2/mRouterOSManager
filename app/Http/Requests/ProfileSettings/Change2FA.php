@@ -13,7 +13,7 @@ class Change2FA extends FormRequest
     public function authorize(): bool
     {
         /** @var \Illuminate\Http\Request $this */
-        return Auth::check() && $this->user()->is(Auth::user());
+        return $this->user()->is(Auth::user());
     }
 
     /**

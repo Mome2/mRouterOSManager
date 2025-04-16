@@ -15,7 +15,7 @@ class ChangeAvatar extends FormRequest
         /** @var \Illuminate\Http\Request $this */
 
         // Allow only authenticated users to change their own avatar
-        return Auth::check() && $this->user()->is(Auth::user());
+        return $this->user()->is(Auth::user());
     }
 
     /**

@@ -12,7 +12,7 @@ class AddUser extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('add_user');
+        return Auth::user()->can('add_user');
     }
 
     /**

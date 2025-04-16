@@ -14,7 +14,7 @@ class TFA extends FormRequest
     public function authorize(): bool
     {
         /** @var \Illuminate\Http\Request $this */
-        return Auth::check() && $this->user()->is(Auth::user()) && Auth::user()->two_factor_enabled;
+        return Auth::user()->two_factor_enabled;
     }
 
     /**

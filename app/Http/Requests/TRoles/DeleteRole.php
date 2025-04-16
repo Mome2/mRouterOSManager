@@ -12,7 +12,7 @@ class DeleteRole extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('delete_role');
+        return Auth::user()->can('delete_role');
     }
 
     /**

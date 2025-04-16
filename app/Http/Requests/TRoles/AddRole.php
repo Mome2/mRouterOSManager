@@ -12,7 +12,7 @@ class AddRole extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('add_role');
+        return Auth::user()->can('add_role');
     }
 
     /**

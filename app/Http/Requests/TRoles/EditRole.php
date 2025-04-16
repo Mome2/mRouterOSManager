@@ -12,7 +12,7 @@ class EditRole extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check() && Auth::user()->can('edit_role');
+        return Auth::user()->can('edit_role');
     }
 
     /**
