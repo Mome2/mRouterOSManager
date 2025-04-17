@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\Is2FA;
@@ -90,14 +93,16 @@ Route::middleware(['auth'])->group(function () {
       // Home route
       Route::get('home', function () {})->name('home');
 
-      // Users resource routes
-      Route::resource('users', 'UserController');
+      // Users Managing routes
+      Route::get('users/create', function () {})->name('create.user');
+      Route::post('users', function () {})->name('store.user');
       Route::patch('users/{user}/status', function () {})->name('change.user.status');
+      Route::delete('users/{user}', function () {})->name('delete.user');
 
       // Roles resource routes
-      Route::resource('roles', 'RoleController');
+      Route::resource('roles', RoleController::class);
 
       // Permissions resource routes
-      Route::resource('permissions', 'PermissionController');
+      Route::resource('permissions', PermissionController::class);
    });
 });
