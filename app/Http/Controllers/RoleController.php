@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Http\Requests\TRoles\AddRole;
+use App\Http\Requests\TRoles\EditRole;
+use App\Http\Requests\TRoles\DeleteRole;
 
 class RoleController extends Controller
 {
@@ -12,7 +15,8 @@ class RoleController extends Controller
     */
    public function index()
    {
-      //
+      $roles = Role::paginate(10);
+      return view('superdashboard.roles.index', compact('roles'));
    }
 
    /**
@@ -20,15 +24,16 @@ class RoleController extends Controller
     */
    public function create()
    {
-      //
+      return view('superdashboard.roles.create');
    }
 
    /**
     * Store a newly created resource in storage.
     */
-   public function store(Request $request)
+   public function store(AddRole $request)
    {
-      //
+      Role::create($request->validated());
+      return redirect()->route('superdashboard.roles.index')->with('success', 'Role created successfully.');
    }
 
    /**
@@ -36,7 +41,7 @@ class RoleController extends Controller
     */
    public function show(Role $role)
    {
-      //
+      return view('superdashboard.roles.show', compact('role'));
    }
 
    /**
@@ -44,23 +49,25 @@ class RoleController extends Controller
     */
    public function edit(Role $role)
    {
-      //
+      return view('superdashboard.roles.edit', compact('role'));
    }
 
    /**
     * Update the specified resource in storage.
     */
-   public function update(Request $request, Role $role)
+   public function update(EditRole $request, Role $role)
    {
-      //
+      $role->update($request->validated());
+      return redirect()->route('superdashboard.roles.index')->with('success', 'Role updated successfully.');
    }
 
    /**
     * Remove the specified resource from storage.
     */
-   public function destroy(Role $role)
+   public function destroy(DeleteRole $request, Role $role)
    {
-      //
+      $role->delete();
+      return redirect()->route('superdashboard.roles.index')->with('success', 'Role deleted successfully.');
    }
 
    /**
@@ -68,7 +75,8 @@ class RoleController extends Controller
     */
    public function restore(Role $role)
    {
-      //
+      $role->restore();
+      return redirect()->route('superdashboard.roles.index')->with('success', 'Role restored successfully.');
    }
 
    /**
@@ -76,6 +84,7 @@ class RoleController extends Controller
     */
    public function forceDelete(Role $role)
    {
-      //
+      $role->forceDelete();
+      return redirect()->route('superdashboard.roles.index')->with('success', 'Role permanently deleted.');
    }
 }

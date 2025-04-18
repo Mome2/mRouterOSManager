@@ -25,7 +25,8 @@ class RemovePermissionRole extends FormRequest
       return [
          //
          'role_id' => ['required', 'exists:roles,id'],
-         'permission_id' => ['required', 'exists:permissions,id'],
+         'permission_ids' => ['required', 'array'],
+         'permission_ids.*' => ['exists:permissions,id'],
       ];
    }
 }
