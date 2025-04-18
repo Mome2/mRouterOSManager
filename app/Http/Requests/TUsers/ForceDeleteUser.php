@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Requests\TPermissions;
+namespace App\Http\Requests\TUsers;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class RestorePermission extends FormRequest
+class ForceDeleteUser extends FormRequest
 {
    /**
     * Determine if the user is authorized to make this request.
     */
    public function authorize(): bool
    {
-      return Auth::user()->can('restore_permission');
+      return Auth::user()->can('forceDelete_user');
    }
 
    /**
@@ -23,7 +23,7 @@ class RestorePermission extends FormRequest
    public function rules(): array
    {
       return [
-         'id' => 'required|integer|exists:permissions,id',
+         'id' => 'required|integer|exists:users,id',
       ];
    }
 }

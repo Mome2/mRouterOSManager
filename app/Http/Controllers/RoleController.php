@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use Illuminate\Http\Request;
 use App\Http\Requests\TRoles\AddRole;
 use App\Http\Requests\TRoles\EditRole;
 use App\Http\Requests\TRoles\DeleteRole;
+use App\Http\Requests\TRoles\RestoreRole;
+use App\Http\Requests\TRoles\ForceDeleteRole;
 
 class RoleController extends Controller
 {
@@ -33,7 +34,8 @@ class RoleController extends Controller
    public function store(AddRole $request)
    {
       Role::create($request->validated());
-      return redirect()->route('superdashboard.roles.index')->with('success', 'Role created successfully.');
+      return redirect()->route('superdashboard.roles.index')
+         ->with('success', 'Role created successfully.');
    }
 
    /**
@@ -58,33 +60,40 @@ class RoleController extends Controller
    public function update(EditRole $request, Role $role)
    {
       $role->update($request->validated());
-      return redirect()->route('superdashboard.roles.index')->with('success', 'Role updated successfully.');
+      return redirect()->route('superdashboard.roles.index')
+         ->with('success', 'Role updated successfully.');
    }
 
    /**
     * Remove the specified resource from storage.
     */
-   public function destroy(DeleteRole $request, Role $role)
+   public function destroy(DeleteRole $request)
    {
-      $role->delete();
-      return redirect()->route('superdashboard.roles.index')->with('success', 'Role deleted successfully.');
+      /**@var \Illuminate\Http\Request $request */
+      Role::destroy($request->input('id'));
+      return redirect()->route('superdashboard.roles.index')
+         ->with('success', 'Role deleted successfully.');
    }
 
    /**
     * Restore the specified resource from storage.
     */
-   public function restore(Role $role)
+   public function restore(RestoreRole $request)
    {
-      $role->restore();
-      return redirect()->route('superdashboard.roles.index')->with('success', 'Role restored successfully.');
+      /**@var \Illuminate\Http\Request $request */
+      Role::withTrashed()->restore($request->input('id'));
+      return redirect()->route('superdashboard.roles.index')
+         ->with('success', 'Role restored successfully.');
    }
 
    /**
     * Force delete the specified resource from storage.
     */
-   public function forceDelete(Role $role)
+   public function forceDelete(ForceDeleteRole $request)
    {
-      $role->forceDelete();
-      return redirect()->route('superdashboard.roles.index')->with('success', 'Role permanently deleted.');
+      /**@var \Illuminate\Http\Request $request */
+      Role::withTrashed()->forceDelete($request->input('id'));
+      return redirect()->route('superdashboard.roles.index')
+         ->with('success', 'Role permanently deleted.');
    }
 }

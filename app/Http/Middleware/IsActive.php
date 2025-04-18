@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
-class IsAdmin
+class IsActive
 {
    /**
     * Handle an incoming request.
@@ -16,8 +16,8 @@ class IsAdmin
     */
    public function handle(Request $request, Closure $next): Response
    {
-      if (!Auth::user()->hasRole('Super Admin')) {
-         abort(403, 'Unauthorized.');
+      if (Auth::user()->status === "inactive") {
+         return redirect()->route('banned');
       }
       return $next($request);
    }

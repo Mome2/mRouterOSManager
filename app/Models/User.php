@@ -65,7 +65,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
    public function hasRole($role)
    {
-      return $this->roles->contains('slug', $role);
+
+      return $this->roles->pluck('slug')->contains(str($role)
+         ->squish()
+         ->lower()
+         ->replaceMatches('/[^a-zA-Z0-9]+/', '_')
+         ->replaceMatches('/[0-9]+/', '')
+         ->trim('_'));
    }
 
    public function hasPermission($permission)

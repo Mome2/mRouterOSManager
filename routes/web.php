@@ -6,12 +6,12 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\Is2FA;
-
-$pagination = 10;
+use App\Http\Middleware\IsActive;
 
 /*
  * Index route
  */
+
 Route::get('/', function () {
    return view('welcome');
 });
@@ -41,20 +41,23 @@ Route::middleware('guest')->group(function () {
 /*
  * Auth middleware routes
  */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', IsActive::class])->group(function () {
+
+   // Inactive user route
+   Route::get('auth/banned', function () {})->name('banned');
 
    // 2FA verify route
-   Route::get('auth/TFAVerify', function () {})->name('TFAVerify');
-   Route::post('auth/TFAVerify', function () {});
+   Route::get('auth/tfaverify', function () {})->name('TFAVerify');
+   Route::post('auth/tfaverify', function () {});
 
    // Email verification routes
    Route::prefix('verify-email')->name('verification.')->group(function () {
       // Verification notice
       Route::get('/', function () {})->name('notice');
       // Verify email
-      Route::get('{id}/{hash}', function () {})->middleware(['signed', 'throttle:6,1'])->name('verify');
+      Route::get('{id}/{hash}', function () {})->middleware(['signed', 'throttle:3,1'])->name('verify');
       // Resend verification email
-      Route::post('/', function () {})->middleware(['throttle:6,1'])->name('resend');
+      Route::post('/', function () {})->middleware(['throttle:3,1'])->name('resend');
    });
 
    // Confirm password route
@@ -85,24 +88,27 @@ Route::middleware(['auth'])->group(function () {
          // Delete account route
          Route::delete('delete', function () {})->name('delete');
       });
-   });
+      // Super admin routes
+      Route::prefix('Managment')->middleware(IsAdmin::class)->name('Super.')->group(function () {
 
-   // Super admin routes
-   Route::prefix('Super/dashboard')->middleware(IsAdmin::class)->name('Super.')->group(function () {
+         // Users Managing routes
+         Route::get('users', function () {})->name('index.users');
+         Route::get('users/{user}', function () {})->name('show.user');
+         Route::post('users', function () {})->name('store.user');
+         Route::patch('users/status', function () {})->name('change.user.status');
+         Route::delete('users/delete', function () {})->name('delete.user');
+         Route::post('users/restore', function () {})->name('restore.user');
+         Route::delete('users/forceDelete', function () {})->name('forceDelete.user');
 
-      // Home route
-      Route::get('home', function () {})->name('home');
+         // Roles resource routes
+         Route::resource('roles', RoleController::class);
+         Route::post('roles/restore', function () {})->name('restore.role');
+         Route::delete('roles/forceDelete', function () {})->name('forceDelete.role');
 
-      // Users Managing routes
-      Route::get('users/create', function () {})->name('create.user');
-      Route::post('users', function () {})->name('store.user');
-      Route::patch('users/{user}/status', function () {})->name('change.user.status');
-      Route::delete('users/{user}', function () {})->name('delete.user');
-
-      // Roles resource routes
-      Route::resource('roles', RoleController::class);
-
-      // Permissions resource routes
-      Route::resource('permissions', PermissionController::class);
+         // Permissions resource routes
+         Route::resource('permissions', PermissionController::class);
+         Route::post('permissions/restore', function () {})->name('restore.permission');
+         Route::delete('permissions/forceDelete', function () {})->name('forceDelete.permission');
+      });
    });
 });

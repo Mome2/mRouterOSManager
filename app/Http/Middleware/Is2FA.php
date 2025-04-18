@@ -16,9 +16,7 @@ class Is2FA
     */
    public function handle(Request $request, Closure $next): Response
    {
-      if (
-         Auth::user()->two_factor_enabled && !session()->get('2fa_passed')
-      ) {
+      if (Auth::user()->two_factor_enabled && !session()->get('2fa_passed')) {
          return redirect()->route('TFAVerify');
       }
 

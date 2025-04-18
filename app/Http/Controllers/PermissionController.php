@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permission;
-use Illuminate\Http\Request;
 use App\Http\Requests\TPermissions\AddPermission;
 use App\Http\Requests\TPermissions\EditPermission;
 use App\Http\Requests\TPermissions\DeletePermission;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\TPermissions\RestorePermission;
+use App\Http\Requests\TPermissions\ForceDeletePermission;
 
 class PermissionController extends Controller
 {
@@ -34,7 +34,8 @@ class PermissionController extends Controller
    public function store(AddPermission $request)
    {
       Permission::create($request->validated());
-      return redirect()->route('superdashboard.permissions.index')->with('success', 'Permission created successfully.');
+      return redirect()->route('superdashboard.permissions.index')
+         ->with('success', 'Permission created successfully.');
    }
 
    /**
@@ -59,33 +60,40 @@ class PermissionController extends Controller
    public function update(EditPermission $request, Permission $permission)
    {
       $permission->update($request->validated());
-      return redirect()->route('superdashboard.permissions.index')->with('success', 'Permission updated successfully.');
+      return redirect()->route('superdashboard.permissions.index')
+         ->with('success', 'Permission updated successfully.');
    }
 
    /**
     * Remove the specified resource from storage.
     */
-   public function destroy(DeletePermission $request, Permission $permission)
+   public function destroy(DeletePermission $request)
    {
-      $permission->delete();
-      return redirect()->route('superdashboard.permissions.index')->with('success', 'Permission deleted successfully.');
+      /**@var \Illuminate\Http\Request $request */
+      Permission::destroy($request->input('id'));
+      return redirect()->route('superdashboard.permissions.index')
+         ->with('success', 'Permission deleted successfully.');
    }
 
    /**
     * Restore the specified resource from storage.
     */
-   public function restore(Permission $permission)
+   public function restore(RestorePermission $request)
    {
-      $permission->restore();
-      return redirect()->route('superdashboard.permissions.index')->with('success', 'Permission restored successfully.');
+      /**@var \Illuminate\Http\Request $request */
+      Permission::withTrashed()->restore($request->input('id'));
+      return redirect()->route('superdashboard.permissions.index')
+         ->with('success', 'Permission restored successfully.');
    }
 
    /**
     * Force delete the specified resource from storage.
     */
-   public function forceDelete(Permission $permission)
+   public function forceDelete(ForceDeletePermission $request)
    {
-      $permission->forceDelete();
-      return redirect()->route('superdashboard.permissions.index')->with('success', 'Permission permanently deleted.');
+      /**@var \Illuminate\Http\Request $request */
+      Permission::withTrashed()->forceDelete($request->input('id'));
+      return redirect()->route('superdashboard.permissions.index')
+         ->with('success', 'Permission permanently deleted.');
    }
 }
