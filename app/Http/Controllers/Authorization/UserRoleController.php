@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Authorization;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\Pivot\UserRole;
 use App\Http\Requests\Pivot\RemoveRoleUser;

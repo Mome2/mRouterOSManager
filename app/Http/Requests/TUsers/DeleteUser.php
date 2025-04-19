@@ -14,7 +14,7 @@ class DeleteUser extends FormRequest
    {
       /** @var \Illuminate\Http\Request $this */
       $targetUserId = $this->input('id');
-      return (int) $targetUserId === Auth::id();
+      return (int) $targetUserId === Auth::id() || Auth::user()->can('delete_user');
    }
 
    /**

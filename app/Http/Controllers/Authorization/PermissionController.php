@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Authorization;
 
 use App\Models\Permission;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TPermissions\AddPermission;
 use App\Http\Requests\TPermissions\EditPermission;
 use App\Http\Requests\TPermissions\DeletePermission;
