@@ -17,7 +17,7 @@ class RoleController extends Controller
    public function index()
    {
       $roles = Role::paginate(10);
-      return view('superdashboard.roles.index', compact('roles'));
+      return view('Super.roles.index', compact('roles'));
    }
 
    /**
@@ -34,7 +34,7 @@ class RoleController extends Controller
    public function store(AddRole $request)
    {
       Role::create($request->validated());
-      return redirect()->route('superdashboard.roles.index')
+      return redirect()->route('Super.roles.index')
          ->with('success', 'Role created successfully.');
    }
 
@@ -60,7 +60,7 @@ class RoleController extends Controller
    public function update(EditRole $request, Role $role)
    {
       $role->update($request->validated());
-      return redirect()->route('superdashboard.roles.index')
+      return redirect()->route('Super.roles.index')
          ->with('success', 'Role updated successfully.');
    }
 
@@ -71,7 +71,7 @@ class RoleController extends Controller
    {
       /**@var \Illuminate\Http\Request $request */
       Role::destroy($request->input('id'));
-      return redirect()->route('superdashboard.roles.index')
+      return redirect()->route('Super.roles.index')
          ->with('success', 'Role deleted successfully.');
    }
 
@@ -82,7 +82,7 @@ class RoleController extends Controller
    {
       /**@var \Illuminate\Http\Request $request */
       Role::withTrashed()->restore($request->input('id'));
-      return redirect()->route('superdashboard.roles.index')
+      return redirect()->route('Super.roles.index')
          ->with('success', 'Role restored successfully.');
    }
 
@@ -93,7 +93,7 @@ class RoleController extends Controller
    {
       /**@var \Illuminate\Http\Request $request */
       Role::withTrashed()->forceDelete($request->input('id'));
-      return redirect()->route('superdashboard.roles.index')
+      return redirect()->route('Super.roles.index')
          ->with('success', 'Role permanently deleted.');
    }
 }

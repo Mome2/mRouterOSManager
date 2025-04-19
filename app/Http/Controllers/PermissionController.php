@@ -17,7 +17,7 @@ class PermissionController extends Controller
    public function index()
    {
       $permissions = Permission::paginate(10);
-      return view('superdashboard.permissions.index', compact('permissions'));
+      return view('Super.permissions.index', compact('permissions'));
    }
 
    /**
@@ -34,7 +34,7 @@ class PermissionController extends Controller
    public function store(AddPermission $request)
    {
       Permission::create($request->validated());
-      return redirect()->route('superdashboard.permissions.index')
+      return redirect()->route('Super.permissions.index')
          ->with('success', 'Permission created successfully.');
    }
 
@@ -60,7 +60,7 @@ class PermissionController extends Controller
    public function update(EditPermission $request, Permission $permission)
    {
       $permission->update($request->validated());
-      return redirect()->route('superdashboard.permissions.index')
+      return redirect()->route('Super.permissions.index')
          ->with('success', 'Permission updated successfully.');
    }
 
@@ -71,7 +71,7 @@ class PermissionController extends Controller
    {
       /**@var \Illuminate\Http\Request $request */
       Permission::destroy($request->input('id'));
-      return redirect()->route('superdashboard.permissions.index')
+      return redirect()->route('Super.permissions.index')
          ->with('success', 'Permission deleted successfully.');
    }
 
@@ -82,7 +82,7 @@ class PermissionController extends Controller
    {
       /**@var \Illuminate\Http\Request $request */
       Permission::withTrashed()->restore($request->input('id'));
-      return redirect()->route('superdashboard.permissions.index')
+      return redirect()->route('Super.permissions.index')
          ->with('success', 'Permission restored successfully.');
    }
 
@@ -93,7 +93,7 @@ class PermissionController extends Controller
    {
       /**@var \Illuminate\Http\Request $request */
       Permission::withTrashed()->forceDelete($request->input('id'));
-      return redirect()->route('superdashboard.permissions.index')
+      return redirect()->route('Super.permissions.index')
          ->with('success', 'Permission permanently deleted.');
    }
 }

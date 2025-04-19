@@ -16,9 +16,13 @@ class IsActive
     */
    public function handle(Request $request, Closure $next): Response
    {
-      if (Auth::user()->status === "inactive") {
+      if (Auth::user()->status !== "active") {
+         Auth::logout();
+         $request->session()->invalidate();
+         $request->session()->regenerateToken();
          return redirect()->route('banned');
       }
+
       return $next($request);
    }
 }
