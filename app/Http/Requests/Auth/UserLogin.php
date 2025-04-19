@@ -6,6 +6,9 @@ use App\Http\Requests\Ratelimiting;
 
 class UserLogin extends Ratelimiting
 {
+
+  protected int $maxAttempts = 3;
+  protected int $decayMinutes = 10;
   /**
    * Determine if the user is authorized to make this request.
    */
