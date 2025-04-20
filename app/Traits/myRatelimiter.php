@@ -4,51 +4,49 @@ namespace App\Traits;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiter;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 
 trait myRatelimiter
 {
 
-  protected function hasTooManyAttempts(array $keys)
+  public function hasTooManyAttempts()
   {
     return $this->limiter()
       ->tooManyAttempts(
-        $this->throttleKey($keys),
+        $this->throttleKey(),
         $this->maxAttempts()
       );
   }
 
-  protected function incrementAttempts(array $keys)
+  public function incrementAttempts()
   {
     $this->limiter()->hit(
-      $this->throttleKey($keys),
+      $this->throttleKey(),
       $this->decayMinutes() * 60
     );
   }
 
-  protected function remainAttempts(array $keys)
+  public function remainAttempts()
   {
     return $this->limiter()
-      ->retriesLeft($this->throttleKey($keys), $this->maxAttempts());
+      ->retriesLeft($this->throttleKey(), $this->maxAttempts());
   }
 
-  protected function retryAfter(array $keys)
+  public function retryAfter()
   {
     return $this->limiter()
-      ->availableIn($this->throttleKey($keys));
+      ->availableIn($this->throttleKey());
   }
 
-  protected function clearAttempts(array $keys)
+  public function clearAttempts()
   {
     $this->limiter()
-      ->clear($this->throttleKey($keys));
+      ->clear($this->throttleKey());
   }
 
-  protected function fireLockoutEvent(Request $request)
+  public function fireLockoutEvent()
   {
-    event(new Lockout($request));
+    event(new Lockout($this));
   }
 
   protected function limiter()
@@ -56,17 +54,12 @@ trait myRatelimiter
     return app(RateLimiter::class);
   }
 
-  protected function throttleKey(array $keys)
-  {
-    return Str::transliterate(Str::lower(implode('|', $keys)));
-  }
-
-  public function maxAttempts()
+  protected function maxAttempts()
   {
     return property_exists($this, 'maxAttempts') ? $this->maxAttempts : 5;
   }
 
-  public function decayMinutes()
+  protected function decayMinutes()
   {
     return property_exists($this, 'decayMinutes') ? $this->decayMinutes : 5;
   }
