@@ -35,6 +35,6 @@ jobs:
         with:
           server: ftpupload.net
           username: eb2a_38737003
-          password: 021216
+          password: '021216'
           server-dir: /htdocs/
           port: 21
