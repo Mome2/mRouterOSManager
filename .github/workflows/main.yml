@@ -34,6 +34,6 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ftp.eb2a.com
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
+          username: eb2a_38737003
+          password: 021216
           server-dir: /htdocs/
