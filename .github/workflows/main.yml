@@ -33,7 +33,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
-          server: ftp.eb2a.com
+          server: ftpupload.net
           username: eb2a_38737003
           password: 021216
           server-dir: /htdocs/
